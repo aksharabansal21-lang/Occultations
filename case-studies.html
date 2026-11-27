@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Occultations — Four Case Studies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  /* ============================================================
+     Color and type tokens — same family as the archive page
+     ============================================================ */
+  :root{
+    --ink:        #0e0d0d;
+    --ink-2:      #1a1616;
+    --ink-3:      #262020;
+    --line:       #382a2a;
+    --paper:      #ece8e1;
+    --paper-dim:  #dacdbf;
+    --gold:       #c99f4a;
+    --gold-dim:   #8a6b2e;
+    --rust:       #d96b52;
+    --redact:     #2e2828;
+
+    --display: 'Fraunces', Georgia, serif;
+    --body: 'Source Serif 4', Georgia, serif;
+    --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+
+    --maxw: 720px;
+    --wide: 1080px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--body);
+    font-size:17px;
+    font-weight: 400;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--gold); color:var(--ink); }
+  a{ color:inherit; }
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+
+  h1,h2,h3,h4{ font-family:var(--display); font-weight:400; margin:0; color:var(--paper); }
+
+  section{ padding:100px 24px; }
+  .inner{ max-width:var(--maxw); margin:0 auto; }
+  .inner-wide{ max-width:var(--wide); margin:0 auto; }
+
+  /* placeholder callouts — remove these once real copy is in */
+  .fill{
+    color:var(--rust);
+    font-style:italic;
+  }
+  .fill::before{ content:"— "; opacity:.6; }
+
+  /* ---------------- NAV ---------------- */
+  nav{
+    position:sticky; top:0; z-index:60;
+    background:rgba(14,13,13,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:var(--wide);
+    margin:0 auto;
+    padding:16px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+    flex-wrap:wrap;
+  }
+  .brand{
+    font-family:var(--mono);
+    font-size:13px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--paper);
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .brand .dot{ width:6px; height:6px; border-radius:50%; background:var(--gold); display:inline-block; }
+  .nav-links{ display:flex; gap:22px; list-style:none; margin:0; padding:0; flex-wrap:wrap; }
+  .nav-links a{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    text-decoration:none;
+    color:var(--paper-dim);
+    padding-bottom:3px;
+    border-bottom:1px solid transparent;
+    transition:color .2s, border-color .2s;
+  }
+  .nav-links a:hover, .nav-links a.active{ color:var(--gold); border-color:var(--gold); }
+
+  /* ---------------- HERO ---------------- */
+  .hero{
+    padding:120px 24px 72px;
+    border-bottom:1px solid var(--line);
+    background:
+      radial-gradient(ellipse 700px 320px at 18% -10%, rgba(201,161,50,0.08), transparent 60%),
+      var(--ink);
+  }
+  .hero .inner{ max-width:var(--wide); }
+  .hero h1{
+    font-size:clamp(48px, 8vw, 92px);
+    letter-spacing:-0.01em;
+    line-height:0.97;
+    max-width:16ch;
+  }
+  .hero .tagline{
+    font-family:var(--body);
+    font-style:italic;
+    font-size:19px;
+    color:var(--paper-dim);
+    max-width:52ch;
+    margin-top:22px;
+  }
+
+  /* index of four cases, shown right on the hero */
+  .toc{
+    margin-top:56px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border:1px solid var(--line);
+  }
+  @media (max-width:820px){ .toc{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:520px){ .toc{ grid-template-columns:1fr; } }
+  .toc a{
+    display:block;
+    padding:22px 20px;
+    text-decoration:none;
+    border-right:1px solid var(--line);
+    transition:background .2s;
+  }
+  .toc a:last-child{ border-right:none; }
+  .toc a:hover{ background:var(--ink-2); }
+  .toc .no{ font-family:var(--mono); font-size:11px; color:var(--gold); letter-spacing:.1em; }
+  .toc .t{ font-family:var(--display); font-size:17px; margin-top:8px; color:var(--paper); line-height:1.25; }
+  .toc .s{ font-family:var(--mono); font-size:11px; color:var(--paper-dim); margin-top:6px; }
+
+  /* ---------------- CASE STUDY SECTIONS ---------------- */
+  .case-study{ border-bottom:1px solid var(--line); }
+  .case-study:nth-of-type(even){ background:var(--ink-2); }
+
+  .case-head{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:20px;
+    align-items:baseline;
+    margin-bottom:12px;
+  }
+  .case-num{
+    font-family:var(--display);
+    font-size:15px;
+    color:var(--gold);
+    border:1px solid var(--gold-dim);
+    padding:3px 10px;
+  }
+  .case-status{
+    font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    padding:3px 9px; border:1px solid var(--rust); color:var(--rust);
+    justify-self:start;
+  }
+  .case-status.restored{ border-color:var(--gold); color:var(--gold); }
+  .case-title{
+    font-size:clamp(30px,4.4vw,46px);
+    line-height:1.05;
+    margin-top:14px;
+  }
+  .case-sub{
+    font-family:var(--body);
+    font-style:italic;
+    font-size:17px;
+    color:var(--paper-dim);
+    margin-top:12px;
+    max-width:56ch;
+  }
+  .case-meta{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--paper-dim);
+    margin-top:20px;
+    display:flex;
+    gap:24px;
+    flex-wrap:wrap;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:14px 0;
+  }
+  .case-meta span b{ color:var(--gold); display:block; font-weight:500; margin-bottom:2px; }
+
+  .case-body{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:56px;
+    margin-top:48px;
+  }
+  @media (max-width:820px){ .case-body{ grid-template-columns:1fr; } }
+
+  .case-text p{ color:var(--paper-dim); font-size:17px; margin-bottom:22px; }
+  .case-text p:first-of-type::first-letter{
+    font-family:var(--display);
+    font-size:56px;
+    float:left;
+    line-height:.8;
+    padding:8px 10px 0 0;
+    color:var(--gold);
+    font-weight:400;
+  }
+  .case-text h4{
+    font-size:15px;
+    letter-spacing:.02em;
+    color:var(--paper);
+    margin:40px 0 14px;
+    padding-bottom:8px;
+    border-bottom:1px solid var(--line);
+  }
+
+  .exhibit-inline{
+    background:var(--ink);
+    border:1px solid var(--line);
+    border-left:2px solid var(--gold);
+    padding:20px 24px;
+    margin:28px 0;
+    font-style:italic;
+    color:var(--paper-dim);
+  }
+  .case-study img{
+    max-width:400px;
+    width:100%;
+    height:auto;
+    display:block;
+    margin:28px auto;
+  }
+  .redacted{
+    background:var(--redact);
+    color:transparent;
+    border-radius:2px;
+    cursor:pointer;
+    transition:background .35s ease, color .1s ease .1s;
+    padding:0 2px;
+    user-select:none;
+  }
+  .redacted:hover, .redacted:focus-visible{
+    background:transparent;
+    color:var(--paper);
+    outline:1px dashed var(--gold-dim);
+  }
+
+  /* per-case sidebar: at a glance + notes */
+  .case-side{ position:sticky; top:88px; align-self:start; }
+  .side-block{ margin-bottom:32px; }
+  .side-block b{
+    display:block;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:10px;
+  }
+  .side-block ul{ list-style:none; margin:0; padding:0; }
+  .side-block li{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--paper-dim);
+    padding:8px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .side-block li:last-child{ border-bottom:none; }
+
+  .case-refs{
+    margin-top:56px;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+  }
+  .case-refs h4{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--paper-dim);
+    margin-bottom:14px;
+    border:none;
+    padding:0;
+  }
+  .case-refs ol{
+    margin:0; padding:0 0 0 20px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--paper-dim);
+  }
+  .case-refs li{ margin-bottom:8px; }
+
+  /* ---------------- ABOUT ---------------- */
+  #about .inner{ max-width:640px; }
+  #about p{ font-size:17.5px; color:var(--paper-dim); margin-bottom:20px; }
+  #about p:first-of-type::first-letter{
+    font-family:var(--display);
+    font-size:64px;
+    float:left;
+    line-height:0.8;
+    padding:8px 10px 0 0;
+    color:var(--gold);
+    font-weight:400;
+  }
+
+  /* ---------------- FOOTER ---------------- */
+  footer{ padding:48px 24px 64px; text-align:center; }
+  footer .brand{ justify-content:center; margin-bottom:10px; }
+  footer p{ font-family:var(--mono); font-size:11px; color:var(--paper-dim); letter-spacing:.04em; }
+
+  /* ---------------- SCROLL REVEAL ---------------- */
+  .reveal{ opacity:0; transform:translateY(14px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .reveal{ opacity:1; transform:none; transition:none; }
+    .redacted{ transition:none; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAV — one link per case; add the case title once you know it
+     ============================================================ -->
+<nav>
+  <div class="nav-inner">
+    <a class="brand" href="#top"><span class="dot"></span>Occultations</a>
+    <ul class="nav-links">
+      <li><a href="original Occultations—TruePage.html">Archive</a></li>
+      <li><a href="#case-1">Case I</a></li>
+      <li><a href="#case-2">Case II</a></li>
+      <li><a href="#case-3">Case III</a></li>
+      <li><a href="#case-4">Case IV</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============================================================
+     
+     ============================================================ -->
+<header class="hero" id="top">
+  <div class="inner">
+    <span class="eyebrow">Four long reads</span>
+    <h1>Occultations</h1>
+    <p class="tagline"><span>A deeper look at four episodes in which the suppression of ideas, books and thinkers was turned into a legal weapon against dissent and revolutionary thought.</span></p>
+
+    <!-- jump-to-case index; edit the titles/summaries as you write -->
+    <div class="toc">
+      <a href="#case-1">
+        <div class="no">CASE I</div>
+        <div class="t">The Execution of Socrates</div>
+        <div class="s">In the year 399 BCE, accused by Meletus, Anytus, and Lycon, Socrates was found guilty of impiety and corrupting the youth—executed by drinking a cup of poison hemlock.</div>
+      </a>
+      <a href="#case-2">
+        <div class="no">CASE II</div>
+        <div class="t">The Burning of the Library of Alexandria</div>
+        <div class="s">Over the 1st Century BC to the 4th Century AD, the Library of Alexandria was slowly led to its ultimate demise in 391 AD due to neglect, political instability, and ignorance.</div>
+      </a>
+      <a href="#case-3">
+        <div class="no">CASE III</div>
+        <div class="t">The Mock Execution of Fyodor Dostoevsky</div>
+        <div class="s">On December 22, the mock execution was a staged event of psychological torture in which members of the Petrashevsky circle were led before a firing squad only to receive a last-minute pardon from the tsar.</div>
+      </a>
+      <a href="#case-4">
+        <div class="no">CASE IV</div>
+        <div class="t">The Vernacular Press Act of 1878</div>
+        <div class="s">The Vernacular Press Act 1878 was a law enacted by the British Raj to silence local language papers that criticized and debunked oppressive colonial policies. Considered a gagging act as it unfairly targeted native Indian language papers while permitting English papers that posed no dissent.</div>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     CASE I
+     ============================================================ -->
+<section class="case-study reveal" id="case-1">
+  <div class="inner-wide">
+
+    <div class="case-head">
+      <span class="case-num">No. I</span>
+      <span class="case-status">Executed</span>
+    </div>
+    <h2 class="case-title">The Trial and Death of Socrates</h2>
+    <p class="case-sub">In 399 BCE, accused by Meletus, Anytus, and Lycon, Socrates was found guilty of impiety and corrupting the youth, and executed by drinking poison hemlock.</p>
+
+    <div class="case-body">
+      <div class="case-text">
+        <p>In 399 BCE, in Athens, Socrates died after drinking a cup of poison hemlock. Surrounded by his weeping students, he spent his final hours discussing the soul, what it means to be human, and how one survives disillusionment. The Peloponnesian War had brought new rage and political instability to Athens, and the democracy had only recently been restored after the bloody rule of the Thirty Tyrants. Against that backdrop, Meletus, Anytus, and Lycon accused him of impiety, of not honoring the city’s gods, and of corrupting the youth. The trial and death of Socrates is an acute lesson in the punishment that comes with challenging the structures a society is built on, and in how intellect is often prized as a badge rather than a struggle earned through rigorous observation.</p>
+        <p>Not much is known about the early life of Socrates. Born to a stonemason and a midwife, he grew up learning gymnastics, music, and the other staples of an Athenian boyhood. Plato mentions that Aspasia, a gifted intellectual and a central figure in ancient rhetoric, taught Socrates rhetoric early on. As an adult, he served as a soldier in the Peloponnesian War alongside his close friend Chaerephon. Chaerephon boldly asked the oracle at Delphi whether anyone was wiser than Socrates, and the priestess answered that no one was. Struck by this verdict, and indifferent to the fame so many Athenians craved, Socrates set out to discover what it truly means to know.</p>
+      <p>During his search to find a man any wiser, Socrates encountered reputable politicians, intelligent poets, and literary geniuses. In The Apology of Socrates, by Plato, Socrates mentions how the politicians he met were wise to themselves, but Socrates didn’t find them intelligent at all—all he saw was someone who conformed to the rigid structure of the slowly rebuilding and once-broken Athenian “democracy”. Upon this discovery, Socrates was still hated by these conformists who rejected anyone who refused the traditional structure of wealth and power in Athens, yet Socrates told himself that this didn’t bother him. Neither him or the politician knew anything ‘beautiful’ or ‘real’, the only difference was that the politicians knew nothing yet believed themselves to know everything; while Socrates was acutely aware of his unawareness and the depths of intellect that were still left for him to explore.</p>
+      <p>The poets were more tragic, or dithyrambic, as Socrates would describe them. Thinking that the poets would teach him of their elaborate and melodramatic writing, Socrates found that the poets took great pride in the inspiration that allowed them to put into words phenomena that they simply did not understand that well. While the poets, to some extent, showed some appreciation for the depths of knowledge that were unknown to humans, they still showed that same pride in this unvetted knowledge that offered no real answer to the struggle of Athenian people; all the writings did was flaunt the same type of wisdom all Athenian men were keen on showing: pre-affirmed knowledge that made them believe they held power over the shattered structure of Athens. Again, like the politicians, the knowledge itself became a badge of political authority and wealth in an era that was so starved of intellectual integrity and stability. The public was not ready to accept the discomfort of this limitless ambiguity, so the singular answer offered by these intellectuals was enough for them to continue imposing rigidity within the vulnerable power dynamics of Athens. </p>
+      <p>This inquiry into the “intelligent and powerful” in Athens is what led to Socrates gaining so many enemies for himself. In fact, Aristophanes, in his play “Clouds,” depicts Socrates as an ugly, uncouth buffoon in the Agora who rambled on these intricate topics of philosophy to show his depth. Again, Socrates’ intellect was treated with ignorance.</p>
+      <p>Additionally, while men of the lower classes were often caught up in their work—too busy to worry themselves with philosophy and rhetoric—often younger men of the richer classes, born to the wealthy and powerful, had not much to do and found themselves going to Socrates of their own accord. These young men were prompted by Socrates to question the reason for all this wealth and power in this small section of Athenian society, and often imitated Socrates, and proceeded to question others: the older gentlemen, the politicians, and their families. This outraged the wealthier classes, and instead of confronting the mirror being held up to them by the youth, they were instead angry at Socrates, calling him a ‘Villainous, corrupter of youth’, bringing us to the first of the accusations: corrupting the youth. Socrates saw this hatred towards him as proof of him speaking the truth.</p>
+      <p>Meletus, the first of his accusers, was outraged by the fact that the youth was now ‘indoctrinated’ by Socrates’ skepticism of the social hierarchy. Instead, he believed Socrates was the soul-corruptor of the once reputable youth. This was the same youth that conformed to the laws that enforced the very social hierarchy that gave Meletus the power to silence men like Socrates. Meletus and Socrates believed in vastly different definitions of wisdom. Meletus interpreted the laws of Athens and the hierarchy of economy and wealth as the inherent pillars of wisdom that were meant to be respected and obeyed. Socrates believed that wisdom was empirical, a craft trained and perfected over long periods of time through curiosity rather than passive acceptance of authority. Socrates, through a dialogue with Meletus, proves that Meletus has no care for ‘protecting the youth’, but has his own political agenda of centering power and wealth in one community to satisfy.</p>
+<p>Unethical politicians such as Meletus often weaponized their religion to completely stop curiosity from the lower classes. Rather than upholding Athenian society, all this did was stagnate their progress toward an egalitarian society. This was primarily because this censorship affirmed to enforce ‘dogmatic’ beliefs upheld the existing socioeconomic system that gave heavy protection to individuals with more authority after the Peloponnesian War. This brings us to the second charge: Impiety.</p>
+ <div class="exhibit-inline">
+          <span> "If you think that by killing men you can prevent some one from censuring your evil lives, you are mistaken; that is not a way of escape which is either possible or honourable; the easiest and the noblest way is not to be disabling others, but to be improving yourselves. This is the prophecy which I utter before my departure to the judges who have condemned me."</span>
+        </div>
+<p>Because Socrates often spoke up against traditional structures and beliefs, many believed he was disrespecting established norms and was ‘godless’. The philosopher’s acceptance of the ambiguity of life after death and solace in the discomfort of obscurity is why many traditionalists accused him of disobeying the singular answer that their religion gave them. Socrates, in his Apology, refuses to quit this practice of philosophy, even if it meant being let off from his execution, famously confronting everyone again if they are not ashamed of hoarding this immense power while caring so little for philosophizing on the greatest improvement of the soul through empiricism and curiosity. Socrates held great contempt for the ignorance of individuals in society, even in the wise society of Athens, sponsored by Athena, the goddess of wisdom herself. This irony is what led him to say: Virtue isn’t given by money, but rather with virtue comes money, prompting Athenians to not forget the integral pillar their society was built on; wisdom.</p>
+<p>In the center of both these accusations lies Socrates’ core philosophy: the unexamined life is not worth living, and that questioning all of society’s existing, oppressive norms is what fuels the penchant to move humanity forward and encourage progress, rather than dispel it completely. This is very evident, as Socrates never looked out for himself. Even in Athenian society, which placed heavy emphasis on presentation and reputation, Socrates lived in poverty and often remained unkempt in the Agora, yet he never quit his ‘profession’ of debating and philosophizing, mainly for the purpose of exhorting a certain dogmatic belief on Athenians, but to simply prompt them to question everything rather than accepting these social constructs to nurture growth in society and allow for progress.</p>
+<p>When faced with the reality of his execution, Socrates elucidates that the reason he must die is that he does not wish to avoid death at all; he wishes to escape the unrighteousness of Athenian society, for unrighteousness is everlasting and overruns inevitable death, while the choice to remain rightful is a choice that must be made by everyone who wishes well for humanity. </p>    
+      </div>
+    </div>
+
+    <div class="case-refs">
+      <h4>Sources</h4>
+      <ol>
+        <li>Plato. "Plato's Apology of Socrates." Academia.edu, uploaded by Christopher Anadale, www.academia.edu/30356780 /Platos_Apology_of_Socrates.</li>
+        <li>2006, the trial and death of Socrates. Available at: https://www.academia.edu/44768547/The_Trial_and_Death_of_Socrates (Accessed: 31 August 2026).</li>
+      </ol>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     CASE II
+     ============================================================ -->
+<section class="case-study reveal" id="case-2">
+  <div class="inner-wide">
+
+    <div class="case-head">
+      <span class="case-num">No. II</span>
+      <span class="case-status restored">Vanished</span>
+    </div>
+    <h2 class="case-title">The Burning of the Library of Alexandria</h2>
+
+   <p class="case-sub">Over the 1st Century BC to the 4th Century AD, the Library of Alexandria was slowly led to its ultimate demise in 391 AD due to religious neglect, political instability, and ignorance.</p>
+  
+
+<p>It is said that Rome wasn’t built in a day. Years of curated intelligence, suffering, experimentation, and failure were the prerequisite to the building of history’s most influential empires. Consequently, one can deduce that the great pillars of society, such as knowledge and intellect, aren’t birthrights or inherited virtues; they are disciplines mastered through rigorous doubt and examination. The passive acceptance of unvetted knowledge without critical inspection inherently leads to the decline of intellectualism in society. The tragic history of the decline of the Library of Alexandria best exemplifies this phenomenon. While many argue its fall was caused by a singular, catastrophic fire, the pinnacle of collated wisdom saw its decline through years of steadily administered ignorance and public indifference. </p>
+<p>The idea of a “Great Library” was first proposed by Demetrius of Phalerum, an exiled Athenian student of Aristotle who, who advised Ptolemy I Soter, who inherited Alexandria after Alexander the Great. He advised the king often on governance, urging Ptolemy I to collect books on kingship, politics and philosophy. The Greek orator argued that these texts would allow Ptolemy to learn the “true” art of ruling, defined by Ptolemy as the accountability and intellectual and cultural influence of a ruler. Additionally, both Demetrius and the Ptolemaic dynasty wanted to solidify the newly founded city of Alexandria as the cultural capital of the Greek-speaking world, creating an immense display of literacy, wealth and intellectual superiority. Clearly, there was an emphasis on intellectualism in the Macedonian society at first. A curiosity for knowledge that laid the groundwork for the advancement for the library.</p>
+<p>The Library of Alexandria was thus built under the reign of Ptolemy II Philadelphus. His dedication in erecting the library can be seen in the painting “Ptolemy II Philadelphus Founds the Library of Alexandria”, by Vincenzo Camuccini in 1813. This is a pristine painting portraying the second Ptolemy in the library, collaborating and interacting with the scholars housed there. This solidifies his dedication to the arts and acts as evidence as his crucial patronage. To add, the library was never intended to be a simple, storage facility for books, but was divided into two institutions. The first was referred to as “the Mouseion”, that translates to “The museum”. In the museum, specialized scholars in all fields such as Mathematics and Medicine resided. The second major section of the library was “The Library”. This section contained scrolls and books for scholars to access at any time.</p>
+<p>The library continued to flourish under the patronage of early kings. Under the reign of Ptolemy III Euergetes, the collection of books and scrolls in the library grew exponentially. Books were taken and copied from existing libraries and scholars. In fact, under the patronage of the following kings, Ptolemy V and Ptolemy VI. Both kings made the acquisition of new knowledge and books so important around the Mediterranean that many scholars began hiding their private library collections, as many were seized and housed in the Library of Alexandria instead. The strive to collect new knowledge and become an intellectual capital was so prominent in Greco-Macedonian society that Ptolemy V, to undercut the prestige of the Library of Pergamon, prohibited the export of papyrus that was, at the time, necessary to copy books. This inadvertently encouraged the growth of Pergamon’s papyrus industry. The evidence and patronage of the library under the first few rulers of the Ptolemaic dynasty is proof that information and intellectualism itself were not homogenized during the era at first. Murky politics did not hamper the academic freedom of scholars and citizens because Alexandria was a society whose government directly supported its growth. Intellectualism was viewed as a testament to a region’s prestige, not a threat to its authority. This will differ as we move on to the rise of Caesar and religion in late antiquity.
+
+</p>
+<p>As mentioned previously, the “Mouseion” of the library was the section that housed scholars. During the Ptolemaic period, only male scholars received patronage from the library, with access to roam freely; it is said to have kept five hundred thousand scrolls of books. Women faced strict societal repression and restriction in educating in the library, while they were allowed to make use of the library’s resources. </p>
+<p >Scholars such as literary critics, scientists, poets, and copyists were allowed to live rent-free. This allowance to live rent-free allowed the greatest minds of the time to devote themselves to studying, writing, and teaching, freeing them of trivial struggles such as financial matters. Every scholar at the Mouseion was expected to teach in some way and give lectures. Because of the permission of intellectual freedom and the encouragement of academic growth, some of history’s most influential scholars emerged from the Library of Alexandria. The head librarians included scholars such as Eratosthenes (276-195 BCE), a polymath and geographer who was one of the first individuals to map the circumference of Earth and make a world-map; Zenodotus, who was the first librarian to establish alphabetical ordering for scrolls, a crucial method used across all libraries today; Aristophanes of Byzantium, a grammarian who produced editions of Homer’s works such as the “Odyssey” and “Iliad”, which are quintessential literary elements even today; and Callimachus, a poet and scholar who compiled the <i>Pinakes</i>, an early catalogue of the library’s holdings. Archimedes, antiquity’s most famous mathematician and the thinker behind the principle of buoyancy, is traditionally said to have studied in Alexandria. The patronage and funding of sciences and knowledge acquisition during this era allowed for critical scientific and literary progress, as exemplified by the scholars and mentors who resided at the library.</p>
+<p>Vitruvius, in the first century CE, expressed his gratitude for the library and the work of preserving its ideas:
+</p>
+
+ <div class="exhibit-inline">
+          <span>“The library preserved the memory of mankind.… Hence we must render to them indeed the greatest thanks, because they did not let all go in jealous silence, but provided for the record in writing of their ideas in every kind.”</span>
+        </div>
+
+<p>This quote by Vitruvius exemplifies the gratitude the people of the Mediterranean felt toward the prioritization of intellectual and cultural capital in Alexandria, thanking the scholars of the library for prioritizing the spread of knowledge over competition and feats to excel faster than other influential thinkers. This also shows how diverse knowledge was in the Ptolemaic era, saying how ideas were written in “every kind”. Information was not homogenized yet, and served no political or hidden agendas, as will be seen in late antiquity by the faults of Emperor Theodosius I and Julius Caesar.</p>
+<p>The Library of Alexandria had begun to see its decline under the reign of Ptolemy VIII Physcon, the eighth king of the Ptolemaic Dynasty, who was also a scholar dedicated to writing and transcribing the works of Homer and supporting the library’s patronage. However, Physcon withdrew his support after a brief power struggle and civil war with his older brother, Ptolemy VI Philometor. This was during the later years of the BCE, when Egypt began to prioritize political agenda rather than intellectualism. Following this civil war, Physcon attempted to wipe out the opposition and any dissent towards his authority. In punishing those who supported anyone opposing him, the Ptolemies banished all foreign scholars and librarians. Many scholars took away books from the library as they fled, and, if they were not taken, they were seized and stored in other libraries and intellectual centers, such as in places like Pergamon and Athens.</p>
+<p>One of the many notable scholars who was banished from the library of Alexandria was Aristarchus of Samothrace, an essayist and writer of Homer’s works, and also a mentor to the children of Ptolemy VI Philometor. Aristarchus fled to Cyprus while being head librarian.</p>
+<p>The reign of Ptolemy VIII Physcon marks a crucial turning point in the prioritization of knowledge and new ideas in Egyptian society. Immediately after banishing scholars, the position of head librarian was not given to prestigious and curious scholars, but was instead given to political cronies as a reward. This marks one of the first attempts at censoring the library, where valuable and nuanced knowledge that may have led to the progression of Egyptian civilization was replaced with political propaganda and agenda. When political agenda replaces intellectualism, it not only causes the stagnation of society, as the entry of new ideas is strictly forbidden, but also causes a severe brain drain. Because eminent scholars were no longer allowed to express their ideas in lectures and studies, Alexandria saw a loss of many capable and excelling individuals such as Eratosthenes and Apollodorus of Athens. This stunted the scholarly and literary growth in society, which was now replaced by a single, homogenized idea that questioned the authority of the king and single-handedly homogenized the cognitive curiosity of Alexandrian society.</p>
+<p>The second major event that led to the eventual fall of Alexandria’s great library is encapsulated by the emphasis on political and military funding during the Siege of Alexandria while Julius Caesar was in the midst of civil war. Ptolemy XIII’s enforcement turned against Caesar because of his preference for Cleopatra, and Caesar had found himself trapped in the royal harbor of Alexandria. In order to escape, he and his men set fire to the Egyptian fleets, but the fire had gotten out of control and spread to many parts of the city, including the library. Julius Caesar is often seen as the primary reason the library came to an end. However, the library was not destroyed in a singular conflagration, but was destroyed in a series of destructive events. Julius Caesar’s civil war is just an instance of the prioritization of military and political power over intellectual prowess. This prioritization, according to the philosopher Seneca the Younger, quoted from Livy’s history of Rome (c. 27 BCE to 14 CE), led to over forty thousand scrolls being destroyed in the fire, a direct result of the ignorance of academics and knowledge.</p>
+
+<p>It is also said, according to Plutarch, that Mark Antony gave an entire collection of two hundred thousand books from the Library of Pergamon to Cleopatra VII in 41 BCE. Evidently, a library still existed in Alexandria after Caesar died in 44 BCE. Augustus Caesar is said to have also given some of the books back to Pergamon. This is perfect evidence that knowledge and erudition were no longer intended for strict public use, but were ornamentation for the ruling classes, further enforcing the point that, widely, intellectualism was homogenized in regular society.</p>
+<p>The Ptolemaic Dynasty finally ended with the death of Cleopatra VII in 30 BCE. The Roman occupation of Egypt that followed was the era in which the patronage of the Library of Alexandria was at its weakest. It is documented that Claudius and Hadrian did patronize the library. Claudius supported its growth by erecting a new building in the ancient Mouseion, called the Claudianum, and Hadrian, according to historical records such as Historia Augusta, frequently visited some scholars at the library, posing to them complex questions while answering their questions in return. Inspired by Alexandria’s library, Hadrian built his own Library of Hadrian, modelled after Alexandria, but built in Athens, solidifying Alexandria’s scholarly legacy.</p>
+<p>One of the final, major marks of the fall of Alexandria’s great library is epitomized in the rise of early Christianity and the intellectual assimilation and cultural shift towards Christian scholarship and religious conflicts that followed. Alexandria acted as a primary bridge where Greek philosophy merged with biblical traditions. Because of this increase in the importance placed on Christian dogma and doctrine, rather than maintaining the pagan museum and the libraries, Christian leaders in Alexandria instituted the Catechetical School of Alexandria, which purged the scientific, philosophical, and mathematical diversity and shifted towards Christian biblical commentary, dogmatic philosophy, and scriptoriums that preserved mostly religious texts. This, once again, heightened the issue of the homogenization of rationalism, replacing it with a religious and political agenda. New ideas were sparse, but religious devotion was at its height.</p>
+<p>An early example of the sparseness and stigma towards new and Anti-Christian ideas, and also the infamy shown towards women teaching, is exemplified by Hypatia of Alexandria. She was a philosopher, astronomer, and mathematician who taught celestial mechanics, the art and importance of rational reasoning, and geometry. She taught the philosophy of Plato and the geometry of Euclid and was deeply interested in empirical observation and research. However, she was seized by an enraged Christian mob and murdered by the mob in 415 CE, a victim of the religious and political turmoil of the city. She stands as a victim of violence yet remains a symbol of intellectual freedom and questioning today.</p>
+<p>The same Christian mob led to the destruction of the Serapeum, which was the temple of Serapis that housed a major “daughter library”—a vast collection of ancient scrolls. In the year 391 CE, as an attempt to wipe out Paganism as a major religion and replace it with Christianity as the major religion, Emperor Theodosius I officially approved the decision to destroy the Serapeum. The destruction of the intellectual sanctuary was carried out under Bishop Theophilus. The Serapeum was replaced by a church as an attempt to control the religious freedom and autonomy of people. Religious, intellectual, and ritualistic freedom was now controlled and sanctioned by the state as an act of censoring new ideas while placing emphasis on the old. The rise of Christian imperial policy and institutionalized dogma withdrew the exiguous civic funding from Pagan and classical learning centers, accelerating the multi-century decline and the final loss of the library as an intellectual structure and the quintessential exemplification of state-funded literacy and knowledge. This laid the groundwork for the Middle Ages as well, which was an era well-known for its scientific and literary stagnation because of the centralization of knowledge under strict dogma and the wide gap in literacy between the government and the public.
+</p>
+<p>The library continued to suffer, and years of civil unrest, economic decline, and physical destruction of Alexandria’s Royal Quarter under Roman emperors such as Aurelian and Diocletian continued to follow, and by the late third century CE, it was heavily erased from historical records. The library faded over time, much like academic progress and the acceptance of new ideas over time.</p>
+<p>The widely circulated idea that Muslim Arabs under the Caliph Umar destroyed the library in the year 641 is indefensible. The story suggesting that Umar ordered the burning of the vast collection of knowledge in the name of their religious text—The Quran—and that the scrolls in the library were heresy is very much a myth rather than historical fact. The Arab invasion happened centuries after the last remnants of the library had been destroyed. In the work of Christian writer Gregory Bar Hebraeus, this myth is displayed. It has been dismissed by many academic scholars as a piece of fiction since the 1700s.</p>
+<p>Popular claims that the Library of Alexandria vanished in a single conflagration and marked the end of antiquity are a common parable widely accepted in articles, television shows, books, and school syllabi. These accounts blame a single party rather than a series of staggering events in order to serve a certain agenda, covering up the true political and religious propaganda and dogma that led to the library’s ultimate fall and set the course of humanity’s intellectual development many years back. The fall of the library is, in all actuality, a long timeline of increasing ignorance and socio-political-economic outlook.</p>
+<p>The preservation of knowledge continues to remain a peculiar subject, even in today’s day and age. While we have access to doctorate-level material, articles, and papers, and world-class encryption systems—while the world’s priorities and grievances are scattered across the intellectual, economic, and cultural frameworks of countless societies—our devotion to becoming an intelligent society universally becomes more vulnerable. However, after decades and centuries of advancing technologies, preserving what was unknown—and using the same as a shield against the potential threats of our shaking futures, we know what to prepare for. And now we know that hindrances in the political or social constructs in our societies should not act as hindrances to our dedication to growth and learning, but instead should, in the future, become a zeal for progress and peace.</p>
+</div>
+    </div>
+
+    <div class="case-refs">
+      <h4>Sources</h4>
+      <ol>
+        <li>Stearns, Jonathan. "The Destruction of the Library of Alexandria: A Reassessment." Academia.edu, www.academia.edu/35442697/THE_DESTRUCTION_OF_THE_LIBRARY_OF_ALEXANDRIA_A_REASSESSMENT_published_paper_.</li>
+        <li>Mark, Joshua J. "Library of Alexandria." World History Encyclopedia, 2 Aug. 2018, www.worldhistory.org/Library_of_Alexandria/</li>
+      </ol>
+    </div>
+
+  
+</div>
+</section>
+
+<!-- ============================================================
+     CASE III
+     ============================================================ -->
+<section class="case-study reveal" id="case-3">
+  <div class="inner-wide">
+
+    <div class="case-head">
+      <span class="case-num">No. III</span>
+      <span class="case-status restored">Rescued</span>
+    </div>
+    <h2 class="case-title">The Mock Execution of Fyodor Dostoevsky</h2>
+    <p class="case-sub fill">On December 22, the mock execution was a staged event of psychological torture in which members of the Petrashevsky circle, including writer Fyodor Dostoevsky were led before a firing squad only to receive a last-minute pardon from the tsar.</p>
+
+
+    <div class="case-body">
+      <div class="case-text">
+        <p class="fill"></p>
+        <p class="fill"></p>
+      </div>
+
+
+    <div class="case-refs">
+      <h4>Sources</h4>
+      <ol>
+        <li class="fill">El-Husseini, Ronak. “Fyodr Dostoevsky: Staged Execution (1849).” B.J.A. Samuel, 17 Aug. 2021, www.bjasamuel.com/post/fyodr-dostoevsky staged-execution-1849/li>
+      </ol>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     CASE IV
+     ============================================================ -->
+<section class="case-study reveal" id="case-4">
+  <div class="inner-wide">
+
+    <div class="case-head">
+      <span class="case-num">No. IV</span>
+      <span class="case-status">Repealed</span>
+    </div>
+    <h2 class="case-title">The Vernacular Press Act of 1878</h2>
+    <p class="case-sub fill">The Vernacular Press Act 1878 was a law enacted by the British Raj to silence loca. language papers that criticized and debunked oppressive colonial policies. Considered a gagging act as it unfairly targeted native Indian language papers while permitting English papers that posed no dissent.</p>
+
+    <div class="case-body">
+      <div class="case-text">
+        <p class="fill"></p>
+        <p class="fill"></p>
+
+      
+      </div>
+
+    <div class="case-refs">
+      <h4>Sources</h4>
+      <ol>
+        <li class="fill">India, Legislative Department. The Vernacular Press Act, 1878. Act No. 9 of 1878, India Code, www.indiacode.inc.in</li>
+        <li class="fill">India—The Vernacular Press Act." Parliamentary Debates (Hansard), House of Commons, 1 July 1878, vol. 241, cc. 494–532, hansard.parliament.uk/commons/1878-07-01/debates/fdaa4cdd-67bb-4032-aa9c-449eb5967ba0/India—TheVernacularPressAct.</li>
+      </ol>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     ABOUT
+     ============================================================ -->
+<section id="about">
+  <div class="inner reveal">
+    <div class="sec-head" style="margin-bottom:56px;">
+      <span class="eyebrow">Why this archive exists</span>
+      <h2 style="font-size:clamp(32px,4vw,44px); margin-top:10px;">About</h2>
+    </div>
+    <p class="fill">When it comes to finding and retrieving new knowledge online and in the world, in efforts to learn more, it is frustrating to see so many great, influential works stigmatized because they did not adhere to the political agenda of a regime.</p>
+    <p class="fill">These case studies are an outlook on historical cases on state-enforced censorship, specifically on the trial and death of Socrates, the burning of the library of alexandria, the mock execution of Fyodor Dostoevsy, and the Vernacular Press Act.</p>
+  </div>
+</section>
+
+<footer>
+  <a class="brand" href="#top"><span class="dot"></span>Occultations</a>
+  <p>A case study. Or four. A little magic to see what you might have missed out on.</p>
+</footer>
+
+<script>
+  // scroll-reveal for each case section
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  revealEls.forEach(el => io.observe(el));
+
+  // highlight the active case in the nav as you scroll
+  const sections = document.querySelectorAll('.case-study[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const navIo = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+      }
+    });
+  }, { threshold: 0.5 });
+  sections.forEach(s => navIo.observe(s));
+
+  // tap-to-reveal for touch devices
+  document.querySelectorAll('.redacted').forEach(el => {
+    el.addEventListener('click', () => {
+      el.style.background = 'transparent';
+      el.style.color = 'var(--paper)';
+    });
+  });
+</script>
+
+</body>
+</html>
